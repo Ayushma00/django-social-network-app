@@ -1,0 +1,9 @@
+.love{
+  color: pink;
+
+}
+#compose-body{
+            display: block;
+            overflow: hidden;
+            resize: none;
+        }
