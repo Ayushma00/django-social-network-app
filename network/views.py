@@ -72,6 +72,12 @@ def edit_post(request):
     print("ok")
     return JsonResponse({"body":tweet.body })
 
+@login_required
+def profile(request,username):
+    print(username)
+    user=User.objects.get(username=username)
+    tweets=user.tweets.order_by("-timestamp").all()
+    return render(request,"network/profile.html",{"user":user,"tweets":tweets})
 
 
 

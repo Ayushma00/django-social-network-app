@@ -9,10 +9,13 @@ class Tweet(models.Model):
     user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="tweets")
     body = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    # following=models.IntegerField()
-    # followers=models.IntegerField()
     love = models.ManyToManyField(User,related_name="love")
-    # comment = models.TextField(blank=True)
+
+# class Profile(models.Model):
+#     following=models.ManyToManyField(User,related_name="following")
+#     follower=models.ManyToManyField(User,related_name="follower")
+#
+
 
     def serialize(self,current_user):
         if current_user in self.love.all():

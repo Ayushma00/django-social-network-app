@@ -12,4 +12,5 @@ urlpatterns = [
     path("tweets_api", views.tweet_api, name="tweet_api"),
     path("like_unlike", views.like_post, name="like_post"),
     path("edit_post",views.edit_post,name="edit_post"),
+    path("user/<str:username>",views.profile,name="profile")
 ]

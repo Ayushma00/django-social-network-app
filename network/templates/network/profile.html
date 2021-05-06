@@ -1,0 +1,28 @@
+{% extends "network/layout.html" %}
+
+
+
+{% block body %}
+<div class="mx-auto w-80 p-1 m-3">
+  <h3 class="text-info text-capitalize"><strong>{{user}}</strong></h3>
+  <h5 class="text-success"> Email : {{user.email}}</h5>
+  <h5 class="text-success"> Following :</h5>
+  <h5 class="text-success"> Followers :</h5>
+
+</div>
+
+<div class="mx-auto w-80 p-2 mt-3">
+  <h4 class="text-primary"><strong>My Tweets</strong> </h4>
+  {% for tweet in tweets%}
+  <br>
+  <div class="mx-auto w-75 p-2 mt-0">
+    <p><span class="float-left">
+        <p class="text-primary">{{tweet.body}}</p>
+      </span>
+      <span class="float-right">{{tweet.timestamp}}</span></p>
+
+  </div>
+  {%endfor%}
+</div>
+
+{% endblock %}

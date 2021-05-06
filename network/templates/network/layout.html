@@ -6,17 +6,9 @@
         <title>{% block title %}Social Network{% endblock %}</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+        {% block script %}
+      {% endblock %}
     </head>
-    <!-- <script type="text/javascript">
-      console.log("okk");
-      document.addEventListener("DOMContentLoaded",function(){
-        document.querySelector("#tweet").onclick=()=>{
-        var tweets=document.querySelector('#writeTweet').value;
-
-        document.querySelector("#newpost").innerHTML= tweets;
-      };
-      });
-    </script> -->
     <body>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -26,7 +18,7 @@
               <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="post"><strong>{{ user.username }}</strong></a>
+                        <a class="nav-link" href="{%url 'profile' user.username%}"><strong>{{ user.username }}</strong></a>
                     </li>
 
                 {% endif %}
@@ -52,16 +44,10 @@
 
             </div>
           </nav>
-
-
         <div class="body">
 
             {% block body %}
             {% endblock %}
         </div>
     </body>
-    <script src="{% static 'network/index.js' %}">  </script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-
 </html>
