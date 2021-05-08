@@ -10,13 +10,6 @@ class Tweet(models.Model):
     body = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     love = models.ManyToManyField(User,related_name="love")
-
-# class Profile(models.Model):
-#     following=models.ManyToManyField(User,related_name="following")
-#     follower=models.ManyToManyField(User,related_name="follower")
-#
-
-
     def serialize(self,current_user):
         if current_user in self.love.all():
                 flag="Yes"
@@ -24,8 +17,11 @@ class Tweet(models.Model):
             flag="No"
         if current_user != self.user:
             edit="No"
+
         else:
             edit="Yes"
+
+
         return {
             "id": self.id,
             "user": self.user.username,
@@ -33,6 +29,9 @@ class Tweet(models.Model):
             "timestamp": self.timestamp.strftime("%A | %I:%M %p | %d %B, %Y"),
             "love": self.love.count(),
             "flag":flag,
-            "edit":edit
-            # "comment": self.comment
+            "edit":edit,# "comment": self.comment
         }
+class Followers(models.Model):
+
+    follower=models.ForeignKey(User, on_delete=models.CASCADE,related_name="following")
+    user=models.ForeignKey(User, on_delete=models.CASCADE,related_name="followers")

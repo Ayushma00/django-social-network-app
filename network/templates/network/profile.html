@@ -1,15 +1,28 @@
 {% extends "network/layout.html" %}
-
+{% load static %}
 
 
 {% block body %}
 <div class="mx-auto w-80 p-1 m-3">
-  <h3 class="text-info text-capitalize"><strong>{{user}}</strong></h3>
-  <h5 class="text-success"> Email : {{user.email}}</h5>
-  <h5 class="text-success"> Following :</h5>
-  <h5 class="text-success"> Followers :</h5>
-
+<h3 class="text-info text-capitalize"><strong>{{puser.username}}</strong></h3>
+  <h5 class="text-success"> Email : {{puser.email}}</h5>
 </div>
+  {% if followFlag == "Yes"%}
+  <div style="float: left; z-index: 20">
+     <form action="{% url 'profile' puser.username %}" method="POST"> 
+        {% csrf_token %}
+    {% if following_profile %}
+    <input type="submit" value="Following" name="unfollow_btn" class="btn following-btn" id="unfollowBtn" style="width: 96px">
+    {% else %}
+    <input type="submit" value="Follow" name="follow_btn" class="btn follow-btn">
+{%endif%}
+</form>
+</div>
+{%endif%}
+<span style="margin-right: 1.5rem; font-size: 15px"><strong>{{ puser.following.count }}</strong> <span class="text-muted">Following</span></span>
+    <span style="font-size: 15px"><strong>{{ puser.followers.count }}</strong> <span class="text-muted">Followers</span></span>
+
+
 
 <div class="mx-auto w-80 p-2 mt-3">
   <h4 class="text-primary"><strong>My Tweets</strong> </h4>
@@ -25,4 +38,8 @@
   {%endfor%}
 </div>
 
+{% endblock %}
+{% block script %}
+  <script src="{% static 'network/profile.js' %}">  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 {% endblock %}

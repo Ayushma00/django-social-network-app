@@ -7,7 +7,7 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .models import User,Tweet
+from .models import User,Tweet, Followers
 
 
 def index(request):
@@ -71,14 +71,52 @@ def edit_post(request):
     tweet.save()
     print("ok")
     return JsonResponse({"body":tweet.body })
+def following(request):
+    return None
+#     if not request.user.is_authenticated:
+#         return HttpResponseRedirect(reverse("login"))
+#     user = User.objects.get(id=request.user.id)
+#     followed_users = [followRelation.user for followRelation in user.following.all()]
+#     return render(request, "network/profile.html", {
+#         "followed_users": followed_users
+#     })
+
 
 @login_required
 def profile(request,username):
     print(username)
-    user=User.objects.get(username=username)
-    tweets=user.tweets.order_by("-timestamp").all()
-    return render(request,"network/profile.html",{"user":user,"tweets":tweets})
+    user_p=User.objects.get(username=username)
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('login'))
 
+        if "unfollow_btn" in request.POST:
+            Followers.objects.get(user=user_p, follower=request.user).delete()
+        elif "follow_btn" in request.POST:
+            Followers.objects.create(user=user_p, follower=request.user)
+        else:
+            print("Error: wrong input name")
+        return HttpResponseRedirect(reverse("profile", args=(username, )))
+
+    curr_user_follows_this_profile = False
+    if request.user.is_authenticated:
+        curr_user_follows_this_profile = request.user.following.filter(user=user_p.id).exists()
+    print(curr_user_follows_this_profile)
+    tweets=user_p.tweets.order_by("-timestamp").all()
+    if request.user==user_p:
+        followFlag="No"
+    else:
+        followFlag="Yes"
+    return render(request,"network/profile.html",
+    {"puser":user_p,
+    "tweets":tweets,
+    "followFlag":followFlag,
+    "following_profile": curr_user_follows_this_profile})
+
+@csrf_exempt
+@login_required
+def follow(request):
+    return None
 
 
 def login_view(request):
