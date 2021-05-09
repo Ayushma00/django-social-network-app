@@ -71,15 +71,22 @@ def edit_post(request):
     tweet.save()
     print("ok")
     return JsonResponse({"body":tweet.body })
+@login_required
 def following(request):
-    return None
-#     if not request.user.is_authenticated:
-#         return HttpResponseRedirect(reverse("login"))
-#     user = User.objects.get(id=request.user.id)
-#     followed_users = [followRelation.user for followRelation in user.following.all()]
-#     return render(request, "network/profile.html", {
-#         "followed_users": followed_users
-#     })
+
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login"))
+    user = User.objects.get(id=request.user.id)
+    followed_users = [followRelation.user for followRelation in user.following.all()]
+    tweets=[]
+    for user_f in followed_users:
+        User_f=User.objects.get(username=user_f)
+        tweets.append(User_f.tweets.order_by("-timestamp").all())
+
+    return render(request, "network/following.html", {
+        "tweets":tweets,
+        "followed_users": followed_users
+    })
 
 
 @login_required

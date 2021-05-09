@@ -9,7 +9,7 @@
 </div>
   {% if followFlag == "Yes"%}
   <div style="float: left; z-index: 20">
-     <form action="{% url 'profile' puser.username %}" method="POST"> 
+     <form action="{% url 'profile' puser.username %}" method="POST">
         {% csrf_token %}
     {% if following_profile %}
     <input type="submit" value="Following" name="unfollow_btn" class="btn following-btn" id="unfollowBtn" style="width: 96px">

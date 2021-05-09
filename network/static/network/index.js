@@ -1,5 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
   view_post()
+  $('#page_number').on('click','.page',function(event){
+              let page_no = parseInt($(this).data("pgno"));
+              let max_val = parseInt($(this).data("max_val"));
+              let max_page = Math.ceil(max_val / 10);
+
+              $('.posts').hide();
+
+              if(page_no < max_page){
+                for(let i = 0 + 10*(page_no-1); i<10+ 10*(page_no-1);i++){
+                  $(`#post${i}`).show();
+                }
+              }
+              else{
+                for(let i = 0 + 10*(page_no-1); i<max_val;i++){
+                  $(`#post${i}`).show();
+                }
+              }
+                window.location.href = "#top";
+      });
   textarea = document.querySelector("#compose-body");
   textarea.addEventListener('input', autoResize, false);
   function autoResize() {
@@ -100,8 +119,20 @@ function view_post() {
   fetch('/tweets_api')
     .then(response => response.json())
     .then(data => {
+      let all_data_len=data.length;
+            for(let i=1; i <= Math.ceil(all_data_len / 10);i++){
+              let li = document.createElement('li');
+              li.setAttribute('class', 'page-item')
+              li.innerHTML = `<p style="cursor: pointer;" class="page-link text-primary page" data-max_val = "${all_data_len}" data-pgno ="${i}" >${i}</p>`;
+              document.querySelector('#page_number').append(li);
+              }
+
+
+
       for (let j = 0; j < data.length; j++) {
         let all_tweet = document.createElement("all_tweet")
+        all_tweet.setAttribute('id', `post${j}`)
+        all_tweet.setAttribute('class', `posts`)
         let image_scr
         if (data[j].flag === "Yes") {
           image_scr = "static/network/loveafter.svg"
@@ -140,5 +171,9 @@ function view_post() {
           $(`#e${data[j].id}`).hide();
         }
       }
+      if(all_data_len>9){
+      for(let k=10;k<all_data_len;k++){
+        $(`#post${k}`).hide();
+      }}
     });
 }
